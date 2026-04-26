@@ -1,61 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Richmond Senior High Class of 1991 - 35th Reunion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { box-sizing: border-box; font-family: Georgia, serif; }
+    .gradient-bg { background: linear-gradient(135deg, #059669 0%, #fbbf24 100%); }
+    .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+    @media (max-width: 768px) {
+      .card-hover:hover { transform: none; }
+      .card-hover:active { transform: scale(0.98); }
+      button, .dropdown-item { min-height: 44px; }
+    }
+    .memorial-card { background: linear-gradient(145deg, #f3f4f6, #e5e7eb); border-left: 4px solid #059669; }
+    .event-card { background: linear-gradient(145deg, #ffffff, #f9fafb); border: 2px solid #fbbf24; }
+    .form-section { background: linear-gradient(145deg, #f0fdf4, #ecfdf5); }
+  </style>
+</head>
+<body class="bg-gray-50">
 
+<!-- Header -->
+<header class="gradient-bg text-white shadow-lg">
+  <div class="container mx-auto px-4 py-6">
+    <div class="text-center">
+      <img src="https://raw.githubusercontent.com/itsjennifermichelle/91raiderclassreunion/main/school-seal.png" 
+           alt="Richmond Senior High School Seal" 
+           class="w-24 h-24 mx-auto mb-4 rounded-full shadow-lg"
+           onerror="this.style.display='none'">
+      <h1 class="text-4xl md:text-6xl font-bold mb-2 leading-tight">Richmond Senior High</h1>
+      <h2 class="text-2xl md:text-3xl font-semibold mb-2">Class of 1991</h2>
+      <div class="text-xl md:text-2xl font-medium mb-4">35th Reunion</div>
+      <div class="text-lg font-semibold mt-4">October 2 – 4, 2026 · Rockingham, NC</div>
+    </div>
+  </div>
+</header>
 
-Richmond Senior High School
-CLASS OF '91
-35th Reunion Weekend
-OCTOBER 2 – 4, 2026 · ROCKINGHAM, NC
-🎊 GREAT GATSBY PARTY · LEAK STREET CULTURAL CENTER
-DAYS UNTIL THE REUNION
-—
-DAYS
-:
-—
-HOURS
-:
-—
-MINS
-:
-—
-SECS
-📅 EVENTS
-✉️ RSVP
-🎟️ TICKETS
-💚 DONATE
-💬 BOARD
-👕 T-SHIRTS
-🕯️ MEMORIAL
-📱 UPDATES
-❓ FAQ
-Reunion Weekend
-Three days of celebration, community, and connection
-FRI Oct 2
-Parade & Football Game
-🎊 Class of 1991 Parade & Raiders Game
-🕐 Times: Parade in afternoon · Game at 7:00 PM
-📍 Locations: Downtown Rockingham (Parade) · Richmond Senior High Stadium (Game)
-👑 Led by: Toni Roscoe Maples
-📋 Activities: Class parade down main street · Pick up reunion packets at gate · Watch the Raiders play · Walk the track at halftime · Reconnect with classmates
-SAT Oct 3
-Family Day of Service + Evening Celebration
-🤝 Morning Community Service — 9 AM to 12 PM
-📍 Location: TBD  |  👥 Led by: Calandra McDonald
-Give back to our community together as a class.
-🎒 Backpack Giveaway — 1 PM to 4 PM
-📍 Location: TBD  |  👥 Led by: Chewuna Patterson
-Help local students with school supplies.
-🎭 Great Gatsby Evening Celebration — 7 PM to 12 AM
-📍 Location: Leak Street Cultural Center
-👔 Dress Code: Gatsby Themed or Whatever You Desire — don't let attire stop you! Prizes for best dressed!
-🔞 Age: 35 and up
-🕯️ Moment of Silence: 7:30 – 7:45 PM honoring classmates who have transitioned
-SUN Oct 4
-Reunion Brunch
-🥂 Farewell Brunch — 10 AM to 2 PM
-📍 Location: TBD
-Food, fellowship, and words of inspiration from a special guest speaker.
-📝 Note: Locations marked TBD will be updated here as confirmed. Contact us at 91raidercommittee@gmail.com with questions.
-Richmond Senior High · Class of 1991
-35th Reunion · October 2–4, 2026 · Rockingham, NC
-📧 91raidercommittee@gmail.com
-Raider Pride · Always
+<!-- Countdown Timer -->
+<div class="bg-gradient-to-r from-emerald-900 via-emerald-800 to-amber-700 text-white py-8">
+  <div class="container mx-auto px-4 text-center">
+    <h3 class="text-2xl font-bold mb-4">Days Until the Reunion</h3>
+    <div id="countdown" class="flex justify-center space-x-4 md:space-x-8">
+      <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 min-w-16">
+        <div id="days" class="text-3xl md:text-4xl font-bold">000</div>
+        <div class="text-xs sm:text-sm uppercase tracking-wide">Days</div>
+      </div>
+      <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 min-w-16">
+        <div id="hours" class="text-3xl md:text-4xl font-bold">00</div>
+        <div class="text-xs sm:text-sm uppercase tracking-wide">Hours</div>
+      </div>
+      <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 min-w-16">
+        <div id="minutes" class="text-3xl md:text-4xl font-bold">00</div>
+        <div class="text-xs sm:text-sm uppercase tracking-wide">Mins</div>
+      </div>
+      <div class="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-4 min-w-16">
+        <div id="seconds" class="text-3xl md:text-4xl font-bold">00</div>
+        <div class="text-xs sm:text-sm uppercase tracking-wide">Secs</div>
+      </div>
+    </div>
+  </div>
+</div>
 
+<!-- Navigation -->
+<nav class="bg-emerald-800 text-white sticky top-0 z-50 shadow-lg">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-center py-4">
+      <div class="relative">
+        <button onclick="toggleDropdown()" class="bg-gradient-to-r from-emerald-600 to-amber-600 hover:from-emerald-700 hover:to-amber-700 px-8 py-3 rounded-full font-semibold text-lg shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center space-x-2">
+          <span>✨ Reunion Menu</span>
+          <svg class="w-5 h-5 transform transition-transform duration-200" id="dropdownArrow" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+          </svg>
+        </button>
+        <div id="dropdownMenu" class="hidden absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-72 bg-white rounded-xl shadow-2xl border border-gray-200 overflow-hidden">
+          <div class="bg-gradient-to-r from-emerald-50 to-amber-50 px-4 py-3 border-b border-gray-200">
+            <div class="text-emerald-800 font-semibold text-center">Navigate to Section</div>
+          </div>
+          <div class="py-2 max-h-80 overflow-y-auto">
+            <button onclick="showSection('events')" class="dropdown-item w-full text-left px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center space-x-3">
+              <span class="text-emerald-600 text-lg">📅</span><span>Events Schedule</span>
+            </button>
+            <button onclick="showSection('rsvp')" class="dropdown-item w-full text-left px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center space-x-3">
+              <span class="text-emerald-600 text-lg">✉️</span><span>RSVP &amp; Purchase Tickets</span>
+            </button>
+            <button onclick="showSection('rsvp-board')" class="dropdown-item w-full text-left px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center space-x-3">
+              <span class="text-emerald-600 text-lg">📋</span><span>RSVP Board</span>
+            </button>
+            <button onclick="showSection('memorial')" class="dropdown-item w-full text-left px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-700 transition-colors flex items-center space-x-3">
+              <span class="text-gray-600 text-lg">🕯️</span><span>In Memory</span>
+            </button>
+            <div class="border-t border-gray-200 mt-2 pt-2">
+              <button onclick="showSection('faq')" class="dropdown-item w-full text-left px-4 py-3 text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center space-x-3">
+                <span class="text-amber-600 text-lg">❓</span><span>FAQ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main class="container mx-auto px-4 py-8">
+
+  <!-- ===== EVENTS SECTION ===== -->
+  <section id="events" class="section-content hidden">
+    <h2 class="text-3xl font-bold text-emerald-800 mb-8 text-center">Reunion Weekend Events</h2>
+
+    <!-- Friday -->
+    <div class="mb-8">
+      <h3 class="text-2xl font-semibold text-amber-600 mb-4 flex items-center">
+        <span class="bg-amber-100 rounded-full w-8 h-8 flex items-center justify-center mr-3 text-amber-800">F</span>
+        Friday, October 2nd
+      </h3>
+      <div class="event-card p-6 rounded-lg shadow-md card-hover mb-4">
+        <h4 class="text-xl font-semibold text-emerald-700 mb-3">🎊 Parade &amp; Football Game</h4>
+        <div class="space-y-2 text-gray-700">
+          <p><strong>🕐 Times:</strong> Parade in afternoon &bull; Game starts at 7:00 PM</p>
+          <p><strong>📍 Location:</strong> Downtown Rockingham (Parade) &bull; Richmond Senior High School Stadium (Game)</p>
+          <p><strong>👑 Led by:</strong> Toni Roscoe Maples</p>
+          <p><strong>📋 Activities:</strong></p>
+          <ul class="list-disc list-inside ml-4 space-y-1">
+            <li>Class of 1991 Parade down main street</li>
+            <li>Pick up reunion packets at the gate table</li>
+            <li>Watch the Raiders play!</li>
+            <li>Walk the track during halftime</li>
+            <li>Reconnect with classmates</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saturday -->
+    <div class="mb-8">
+      <h3 class="text-2xl font-semibold text-amber-600 mb-4 flex items-center">
+        <span class="bg-amber-100 rounded-full w-8 h-8 flex items-center justify-center mr-3 text-amber-800">S</span>
+        Saturday, October 3rd – Family Day of Service
+      </h3>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="event-card p-6 rounded-lg shadow-md card-hover">
+          <h4 class="text-xl font-semibold text-emerald-700 mb-3">Morning Community Service</h4>
+          <div class="space-y-2 text-gray-700">
+            <p><strong>🕘 Time:</strong> 9:00 AM – 12:00 PM</p>
+            <p><strong>📍 Location:</strong> TBD</p>
+            <p><strong>👥 Led by:</strong> Calandra McDonald</p>
+            <p>Give back to our community together</p>
+          </div>
+        </div>
+        <div class="event-card p-6 rounded-lg shadow-md card-hover">
+          <h4 class="text-xl font-semibold text-emerald-700 mb-3">Backpack Giveaway</h4>
+          <div class="space-y-2 text-gray-700">
+            <p><strong>🕐 Time:</strong> 1:00 PM – 4:00 PM</p>
+            <p><strong>📍 Location:</strong> TBD</p>
+            <p><strong>👥 Led by:</strong> Chewuna Patterson</p>
+            <p>Help local students with school supplies</p>
+          </div>
+        </div>
+      </div>
+      <div class="event-card p-6 rounded-lg shadow-md card-hover mt-6">
+        <h4 class="text-xl font-semibold text-emerald-700 mb-3">🎭 Evening Celebration – Great Gatsby Party</h4>
+        <div class="space-y-2 text-gray-700">
+          <p><strong>🕖 Time:</strong> 7:00 PM – 12:00 AM</p>
+          <p><strong>📍 Location:</strong> Leak Street Cultural Center</p>
+          <p><strong>👔 Dress Code:</strong> Gatsby or Whatever You Desire – Don't let attire stop you! Prizes for best dressed!</p>
+          <p><strong>🔞 Age Requirement:</strong> 35 and up</p>
+          <div class="bg-amber-50 p-4 rounded-lg mt-4 border-l-4 border-amber-400">
+            <p class="font-semibold text-amber-800">🕯️ Special Moment</p>
+            <p class="text-amber-700">Moment of Silence honoring classmates who have transitioned: 7:30 – 7:45 PM</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sunday -->
+    <div class="mb-8">
+      <h3 class="text-2xl font-semibold text-amber-600 mb-4 flex items-center">
+        <span class="bg-amber-100 rounded-full w-8 h-8 flex items-center justify-center mr-3 text-amber-800">S</span>
+        Sunday, October 4th
+      </h3>
+      <div class="event-card p-6 rounded-lg shadow-md card-hover">
+        <h4 class="text-xl font-semibold text-emerald-700 mb-3">🥂 Reunion Brunch</h4>
+        <div class="space-y-2 text-gray-700">
+          <p><strong>🕘 Time:</strong> 10:00 AM – 2:00 PM</p>
+          <p><strong>📍 Location:</strong> TBD</p>
+          <p>Final gathering with food, fellowship, and words of inspiration from a special guest speaker.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-emerald-50 p-6 rounded-lg border-l-4 border-emerald-500">
+      <p class="text-emerald-800"><strong>📝 Note:</strong> Event locations and times are subject to confirmation. Updates will be posted here as information becomes available.</p>
+    </div>
+  </section>
+
+  <!-- ===== RSVP SECTION ===== -->
+  <section id="rsvp" class="section-content hidden">
+    <h2 class="text-3xl font-bold text-emerald-800 mb-8 text-center">RSVP for Events</h2>
+    <div class="form-section p-6 lg:p-8 rounded-lg shadow-lg max-w-2xl mx-auto">
+      <form id="rsvpForm" onsubmit="handleRSVP(event)">
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-2">First Name *</label>
+            <input type="text" id="firstName" name="firstName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-2">Last Name *</label>
+            <input type="text" id="lastName" name="lastName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 gap-6 mb-6">
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+            <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+          <div>
+            <label for="facebook" class="block text-sm font-medium text-gray-700 mb-2">Facebook Profile Link</label>
+            <input type="url" id="facebook" name="facebook" placeholder="https://facebook.com/yourprofile" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          </div>
+        </div>
+        <div class="mb-6">
+          <label class="block text-sm font-medium text-gray-700 mb-4">Which events will you attend?</label>
+          <div class="space-y-3">
+            <label class="flex items-center"><input type="checkbox" name="events" value="friday-parade" class="mr-3 text-emerald-600"> <span>Friday Parade &amp; Football Game</span></label>
+            <label class="flex items-center"><input type="checkbox" name="events" value="saturday-service" class="mr-3 text-emerald-600"> <span>Saturday Morning Community Service</span></label>
+            <label class="flex items-center"><input type="checkbox" name="events" value="saturday-backpack" class="mr-3 text-emerald-600"> <span>Saturday Backpack Giveaway</span></label>
+            <label class="flex items-center"><input type="checkbox" name="events" value="saturday-party" class="mr-3 text-emerald-600"> <span>Saturday Evening Celebration (Great Gatsby Party)</span></label>
+            <label class="flex items-center"><input type="checkbox" name="events" value="sunday-brunch" class="mr-3 text-emerald-600"> <span>Sunday Brunch</span></label>
+          </div>
+        </div>
+        <div class="mb-6">
+          <label for="guests" class="block text-sm font-medium text-gray-700 mb-2">Number of Guests</label>
+          <select id="guests" name="guests" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            <option value="0">Just me</option>
+            <option value="1">1 guest</option>
+            <option value="2">2 guests</option>
+            <option value="3">3 guests</option>
+            <option value="4">4+ guests</option>
+          </select>
+        </div>
+        <div class="mb-6">
+          <label for="dietary" class="block text-sm font-medium text-gray-700 mb-2">Dietary Restrictions / Special Needs</label>
+          <textarea id="dietary" name="dietary" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Please let us know about any dietary restrictions or special accommodations needed..."></textarea>
+        </div>
+
+        <!-- Deposit Section -->
+        <div class="mb-6 p-6 bg-amber-50 rounded-lg border-2 border-amber-200">
+          <h4 class="text-lg font-semibold text-amber-800 mb-3">💳 Deposit Information</h4>
+          <p class="text-amber-700 mb-4">A <strong>$25 nonrefundable deposit</strong> is required to secure your RSVP for Saturday events at Leak Street Cultural Center. <strong>This $25 deposit will be applied to your Saturday event ticket purchase or transferred to purchase your class reunion t-shirt.</strong></p>
+          <p class="text-amber-700 mb-4">If you would like to donate to pay for a classmate, please indicate that in the memo/note section of your payment.</p>
+          <p class="text-amber-700 mb-4">Please select your preferred payment method:</p>
+          <div class="space-y-3">
+            <label class="flex items-center p-3 border-2 border-amber-200 rounded-lg cursor-pointer hover:border-amber-400 bg-white">
+              <input type="radio" name="paymentMethod" value="cashapp" required class="mr-3 text-amber-600">
+              <div class="flex items-center space-x-3 flex-1">
+                <span class="text-2xl">💚</span>
+                <div class="flex-1">
+                  <div class="font-semibold text-gray-800">Cash App</div>
+                  <div class="text-sm text-gray-600">Send to: $classof1991reunion</div>
+                </div>
+              </div>
+              <a href="https://cash.app/$classof1991reunion" target="_blank" rel="noopener noreferrer" class="ml-4 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 transition-colors text-sm font-semibold whitespace-nowrap">Open Cash App</a>
+            </label>
+            <label class="flex items-center p-3 border-2 border-amber-200 rounded-lg cursor-pointer hover:border-amber-400 bg-white">
+              <input type="radio" name="paymentMethod" value="venmo" required class="mr-3 text-amber-600">
+              <div class="flex items-center space-x-3 flex-1">
+                <span class="text-2xl">💜</span>
+                <div class="flex-1">
+                  <div class="font-semibold text-gray-800">Venmo</div>
+                  <div class="text-sm text-gray-600">Send to: @raiderclassreunion91</div>
+                </div>
+              </div>
+              <a href="https://venmo.com/raiderclassreunion91" target="_blank" rel="noopener noreferrer" class="ml-4 bg-emerald-600 text-white px-4 py-2 rounded hover:bg-emerald-700 transition-colors text-sm font-semibold whitespace-nowrap">Open Venmo</a>
+            </label>
+          </div>
+          <div class="mt-4 p-3 bg-white rounded border border-amber-300">
+            <p class="text-sm text-amber-800"><strong>Important:</strong> Please include your full name in the payment memo/note so we can match your deposit to your RSVP. If donating for a classmate, please specify that in the memo.</p>
+          </div>
+        </div>
+
+        <button type="submit" class="w-full bg-emerald-600 text-white py-3 px-6 rounded-md hover:bg-emerald-700 transition-colors font-semibold">Submit RSVP &amp; Payment Info</button>
+      </form>
+      <div id="rsvpSuccess" class="hidden mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+        Thank you for your RSVP! Please send your $25 deposit. Your spot will be confirmed once payment is received. Your deposit will be applied to your Saturday event ticket purchase or transferred to purchase your class reunion t-shirt.
+      </div>
+    </div>
+
+    <!-- Ticket Pricing -->
+    <div class="mt-12">
+      <h3 class="text-2xl font-bold text-emerald-800 mb-4 text-center">🎟️ Saturday Night Ticket Pricing</h3>
+      <div class="max-w-4xl mx-auto mb-8 p-6 bg-gradient-to-r from-amber-50 to-yellow-50 border-2 border-amber-300 rounded-lg">
+        <h4 class="text-xl font-bold text-amber-900 mb-2">⏰ Early Bird Pricing – Limited Time!</h4>
+        <p class="text-amber-800 text-lg font-semibold mb-2">Early bird prices end May 31, 2026</p>
+        <p class="text-amber-700">Lock in these special prices before they increase!</p>
+      </div>
+      <div class="grid sm:grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-amber-200 card-hover">
+          <h4 class="text-xl font-semibold text-emerald-700 mb-4">Single Class Member</h4>
+          <div class="text-3xl font-bold text-amber-600 mb-2">$35</div>
+          <div class="text-sm text-gray-600 mb-4">Early Bird (April 25 – May 31)</div>
+          <ul class="text-gray-600 mb-6 space-y-2 text-sm">
+            <li>• Great Gatsby Party admission</li>
+            <li>• Dinner &amp; 2 drink tickets</li>
+            <li>• Dancing &amp; entertainment</li>
+            <li>• Memorial moment</li>
+          </ul>
+          <div class="text-sm text-emerald-700 font-semibold">Pay via Cash App or Venmo (above)</div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-amber-200 card-hover relative">
+          <div class="absolute top-0 right-0 bg-red-500 text-white px-3 py-1 rounded-bl-lg text-xs font-bold">BEST VALUE</div>
+          <h4 class="text-xl font-semibold text-emerald-700 mb-4">Couples Ticket</h4>
+          <div class="text-3xl font-bold text-amber-600 mb-2">$60</div>
+          <div class="text-sm text-gray-600 mb-4">Early Bird (April 25 – May 31)</div>
+          <ul class="text-gray-600 mb-6 space-y-2 text-sm">
+            <li>• Two Great Gatsby Party admissions</li>
+            <li>• Dinner &amp; 2 drink tickets each</li>
+            <li>• Dancing &amp; entertainment</li>
+            <li>• Memorial moment</li>
+          </ul>
+          <div class="text-sm text-emerald-700 font-semibold">Pay via Cash App or Venmo (above)</div>
+        </div>
+        <div class="bg-white p-6 rounded-lg shadow-lg border-2 border-amber-200 card-hover">
+          <h4 class="text-xl font-semibold text-emerald-700 mb-4">Non-Class Member / Guest</h4>
+          <div class="text-3xl font-bold text-amber-600 mb-4">$30</div>
+          <ul class="text-gray-600 mb-6 space-y-2 text-sm">
+            <li>• Great Gatsby Party admission</li>
+            <li>• Dancing &amp; entertainment</li>
+            <li>• For guests who did not graduate with us</li>
+            <li class="text-amber-600 font-medium">• Food &amp; drinks available for purchase</li>
+          </ul>
+          <div class="text-sm text-emerald-700 font-semibold">Pay via Cash App or Venmo (above)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RSVP BOARD SECTION ===== -->
+  <section id="rsvp-board" class="section-content hidden">
+    <h2 class="text-3xl font-bold text-emerald-800 mb-8 text-center">RSVP Board</h2>
+    <div class="bg-gradient-to-r from-emerald-600 to-amber-600 text-white p-6 rounded-lg shadow-lg mb-8 text-center">
+      <h3 class="text-2xl font-bold mb-2">🎉 Classmates Attending</h3>
+      <div class="text-5xl font-bold mb-2" id="rsvpCounter">0</div>
+      <p class="text-emerald-100">RSVPs confirmed and counting!</p>
+    </div>
+    <div class="mb-6 max-w-md mx-auto">
+      <input type="text" id="rsvpSearch" placeholder="Search by name..." onkeyup="filterRSVPs()" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500">
+    </div>
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+      <div class="bg-emerald-50 px-6 py-4 border-b border-emerald-200">
+        <h3 class="text-lg font-semibold text-emerald-800">Confirmed Attendees</h3>
+        <p class="text-sm text-emerald-600">Listed in order of RSVP submission</p>
+      </div>
+      <div id="rsvpList" class="divide-y divide-gray-200">
+        <div class="px-6 py-8 text-center text-gray-500">
+          <div class="text-4xl mb-4">📝</div>
+          <p class="text-lg font-medium mb-2">No RSVPs yet!</p>
+          <p class="text-sm">Be the first classmate to RSVP for our reunion.</p>
+        </div>
+      </div>
+      <div class="bg-gray-50 px-6 py-4 text-center">
+        <p class="text-sm text-gray-600">Ready to see your classmates here? Submit your RSVP today! 🎊</p>
+      </div>
+    </div>
+    <div class="mt-8 bg-amber-50 p-6 rounded-lg border-l-4 border-amber-400">
+      <h4 class="font-semibold text-amber-800 mb-2">Haven't RSVP'd Yet?</h4>
+      <p class="text-amber-700 mb-4">Join your classmates and secure your spot at our 35th reunion! The more the merrier!</p>
+      <button onclick="showSection('rsvp')" class="bg-amber-600 text-white px-6 py-2 rounded-lg hover:bg-amber-700 transition-colors font-semibold">Submit Your RSVP Now</button>
+    </div>
+  </section>
+
+  <!-- ===== MEMORIAL SECTION ===== -->
+  <section id="memorial" class="section-content hidden">
+    <h2 class="text-3xl font-bold text-emerald-800 mb-8 text-center">Honoring Classmates Who Have Transitioned</h2>
+    <div class="text-center mb-8">
+      <p class="text-lg text-gray-700 mb-4">We honor and remember our classmates who have transitioned.</p>
+      <p class="text-gray-600">Their memories live on in our hearts and in the bonds we shared at Richmond Senior High.</p>
+    </div>
+
+    <div class="bg-emerald-50 p-8 rounded-lg border-l-4 border-emerald-500 mb-8">
+      <h3 class="text-xl font-semibold text-emerald-800 mb-4">🕯️ Memorial Moment</h3>
+      <p class="text-emerald-700 mb-4">During our Saturday night Great Gatsby Party, we will observe a special moment of silence from <strong>7:30 – 7:45 PM</strong> to honor our classmates who have transitioned.</p>
+      <p class="text-emerald-700">This will be a time for reflection, remembrance, and celebrating the lives of those who touched our hearts during our time together.</p>
+    </div>
+
+    <div class="bg-emerald-50 p-8 rounded-lg border-l-4 border-emerald-500 mb-8">
+      <h3 class="text-xl font-semibold text-emerald-800 mb-4">📋 Cancellation Policy</h3>
+      <p class="text-emerald-700 mb-2">We understand life happens. We will do our best to honor cancellation requests with a <strong>72-hour email notice</strong>.</p>
+      <p class="text-emerald-700">Please send cancellation requests to <strong>91raidercommittee@gmail.com</strong> as soon as possible.</p>
+    </div>
+
+    <div class="form-section p-6 rounded-lg shadow-lg max-w-2xl mx-auto">
+      <h3 class="text-xl font-semibold text-emerald-700 mb-4">Share a Memory or Update Memorial Information</h3>
+      <form id="memorialForm" onsubmit="handleMemorialSubmission(event)">
+        <div class="mb-4">
+          <label for="memorialName" class="block text-sm font-medium text-gray-700 mb-2">Your Name *</label>
+          <input type="text" id="memorialName" name="memorialName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div class="mb-4">
+          <label for="memorialEmail" class="block text-sm font-medium text-gray-700 mb-2">Your Email *</label>
+          <input type="email" id="memorialEmail" name="memorialEmail" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        </div>
+        <div class="mb-4">
+          <label for="memorialMessage" class="block text-sm font-medium text-gray-700 mb-2">Memorial Information or Memory to Share *</label>
+          <textarea id="memorialMessage" name="memorialMessage" rows="5" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500" placeholder="Please share information about a classmate who has transitioned, or share a special memory of someone already listed..."></textarea>
+        </div>
+        <button type="submit" class="w-full bg-emerald-600 text-white py-2 px-4 rounded hover:bg-emerald-700 transition-colors">Submit Memorial Information</button>
+      </form>
+      <div id="memorialSuccess" class="hidden mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+        Thank you for sharing. Memorial information will be reviewed and updated accordingly.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FAQ SECTION ===== -->
+  <section id="faq" class="section-content hidden">
+    <h2 class="text-3xl font-bold text-emerald-800 mb-8 text-center">Frequently Asked Questions</h2>
+    <div class="max-w-4xl mx-auto space-y-6">
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">💰 What are the early bird ticket prices?</h3>
+        <div class="space-y-2 text-gray-700">
+          <p><strong>Single Class Member:</strong> $35 (Early Bird – April 25 – May 31, 2026)</p>
+          <p><strong>Couples Ticket:</strong> $60 (Early Bird – April 25 – May 31, 2026) – Two class members or member + spouse</p>
+          <p><strong>Non-Class Member / Guest:</strong> $30 – For guests who did not graduate with us</p>
+          <p><strong>Additional Guests:</strong> $30 per person for Saturday Night event (21 and up)</p>
+          <p class="text-sm text-emerald-600 mt-2">All Saturday night tickets include admission to the Great Gatsby Party and entertainment. All other activities are pay as you go.</p>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">📍 Where is the Saturday night party?</h3>
+        <p class="text-gray-700">The Great Gatsby Party will be held at <strong>Leak Street Cultural Center</strong> on Saturday, October 3, 2026, from 7:00 PM to 12:00 AM. <strong>35 and up only.</strong></p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">🎭 What should I wear to the evening celebration?</h3>
+        <p class="text-gray-700">Come dressed in Gatsby theme or whatever you desire! Think flapper dresses, feathers, pearls, suspenders, bow ties, and vintage glamour—or wear whatever makes you feel fabulous. Don't let attire stop you from joining us! Prizes will be awarded for best dressed!</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-amber-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">🎊 Tell me about Friday's events</h3>
+        <p class="text-gray-700">Join us for the Class of 1991 Parade down main street in Rockingham, led by <strong>Toni Roscoe Maples</strong>, followed by the Friday night football game at Richmond Senior High School Stadium starting at 7:00 PM. Pick up your reunion packets at the gate table and reconnect during halftime!</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">🤝 What are the community service projects?</h3>
+        <p class="text-gray-700">Saturday morning and afternoon we'll be giving back to our community with service projects (9 AM–12 PM, led by Calandra McDonald) and a backpack giveaway for local students (1 PM–4 PM, led by Chewuna Patterson). Specific locations will be updated as confirmed.</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-amber-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">💳 What deposit is required?</h3>
+        <p class="text-gray-700">A <strong>$25 nonrefundable deposit</strong> is required to secure your RSVP for Saturday events. <strong>This deposit will be applied to your Saturday event ticket purchase or transferred to purchase your class reunion t-shirt.</strong> If you would like to donate to pay for a classmate, please indicate that in the memo. Send via Cash App ($classof1991reunion) or Venmo (@raiderclassreunion91), and include your full name in the payment memo.</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">🍳 Tell me about Sunday brunch</h3>
+        <p class="text-gray-700">Our final gathering will be Sunday brunch from 10:00 AM to 2:00 PM on October 4. Enjoy food, fellowship, and words of inspiration from a special guest speaker. It's a relaxed way to say goodbye and share final memories before everyone heads home.</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-emerald-500">
+        <h3 class="text-xl font-semibold text-emerald-700 mb-3">📧 How do I contact the reunion committee?</h3>
+        <p class="text-gray-700">Email us at <strong><a href="mailto:91raidercommittee@gmail.com" class="text-emerald-600 hover:underline">91raidercommittee@gmail.com</a></strong> with any questions or concerns.</p>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-emerald-800 text-white py-8 mt-12">
+  <div class="container mx-auto px-4 text-center">
+    <h3 class="text-2xl font-bold mb-2">Richmond Senior High Class of 1991</h3>
+    <p class="text-emerald-200 mb-4">35th Reunion</p>
+    <p class="text-emerald-200 mb-2">October 2 – 4, 2026 &bull; Rockingham, NC</p>
+    <p class="text-sm text-emerald-300 mb-2">For questions or assistance, please contact the reunion committee</p>
+    <p class="text-emerald-200 font-semibold">📧 <a href="mailto:91raidercommittee@gmail.com" class="hover:underline">91raidercommittee@gmail.com</a></p>
+    <p class="text-emerald-300 mt-4 text-sm">Raider Pride · Always</p>
+  </div>
+</footer>
+
+<script>
+  // Navigation
+  function showSection(sectionId) {
+    document.querySelectorAll('.section-content').forEach(s => s.classList.add('hidden'));
+    document.getElementById(sectionId).classList.remove('hidden');
+    document.getElementById('dropdownMenu').classList.add('hidden');
+    document.getElementById('dropdownArrow').style.transform = 'rotate(0deg)';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleDropdown() {
+    const dropdown = document.getElementById('dropdownMenu');
+    const arrow = document.getElementById('dropdownArrow');
+    if (dropdown.classList.contains('hidden')) {
+      dropdown.classList.remove('hidden');
+      arrow.style.transform = 'rotate(180deg)';
+    } else {
+      dropdown.classList.add('hidden');
+      arrow.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  document.addEventListener('click', function(event) {
+    const dropdown = document.getElementById('dropdownMenu');
+    const button = event.target.closest('button[onclick="toggleDropdown()"]');
+    if (!button && !dropdown.contains(event.target)) {
+      dropdown.classList.add('hidden');
+      document.getElementById('dropdownArrow').style.transform = 'rotate(0deg)';
+    }
+  });
+
+  // Countdown Timer
+  function updateCountdown() {
+    const reunionDate = new Date('October 2, 2026 19:00:00').getTime();
+    const now = new Date().getTime();
+    const distance = reunionDate - now;
+    if (distance > 0) {
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById('days').textContent = days.toString().padStart(3, '0');
+      document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+      document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+    }
+  }
+
+  // RSVP
+  let rsvpList = [];
+
+  async function handleRSVP(event) {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    const firstName = formData.get('firstName');
+    const lastName = formData.get('lastName');
+    addToRSVPBoard(firstName, lastName);
+    const successDiv = document.getElementById('rsvpSuccess');
+    successDiv.classList.remove('hidden');
+    event.target.reset();
+    setTimeout(() => successDiv.classList.add('hidden'), 8000);
+  }
+
+  function addToRSVPBoard(firstName, lastName) {
+    const newRSVP = {
+      id: Date.now(),
+      firstName, lastName,
+      submittedDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }),
+      rsvpNumber: (rsvpList.length + 1).toString().padStart(3, '0')
+    };
+    rsvpList.push(newRSVP);
+    updateRSVPBoard();
+  }
+
+  function updateRSVPBoard() {
+    document.getElementById('rsvpCounter').textContent = rsvpList.length;
+    const container = document.getElementById('rsvpList');
+    container.innerHTML = rsvpList.map(rsvp => `
+      <div class="rsvp-entry px-6 py-4 hover:bg-gray-50 transition-colors" data-name="${rsvp.firstName.toLowerCase()} ${rsvp.lastName.toLowerCase()}">
+        <div class="flex items-center justify-between">
+          <div>
+            <h4 class="font-semibold text-emerald-700">${rsvp.firstName} ${rsvp.lastName}</h4>
+            <p class="text-sm text-gray-600">RSVP #${rsvp.rsvpNumber} &bull; Submitted: ${rsvp.submittedDate}</p>
+          </div>
+          <span class="inline-block bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full">Confirmed</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterRSVPs() {
+    const searchTerm = document.getElementById('rsvpSearch').value.toLowerCase();
+    document.querySelectorAll('.rsvp-entry').forEach(entry => {
+      entry.style.display = entry.getAttribute('data-name').includes(searchTerm) ? 'block' : 'none';
+    });
+  }
+
+  function handleMemorialSubmission(event) {
+    event.preventDefault();
+    document.getElementById('memorialSuccess').classList.remove('hidden');
+    event.target.reset();
+    setTimeout(() => document.getElementById('memorialSuccess').classList.add('hidden'), 5000);
+  }
+
+  // Init
+  document.addEventListener('DOMContentLoaded', function() {
+    showSection('events');
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  });
+</script>
+</body>
+</html>
