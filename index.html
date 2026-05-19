@@ -757,10 +757,29 @@ function updateCountdown() {
 updateCountdown();
 setInterval(updateCountdown, 1000);
 
-// ═══ RSVP ═══
-let rsvpData = JSON.parse(localStorage.getItem('rsvp91') || '[]');
+// ════════════════════════════════════════════════════════════════════
+// BACKEND CONFIGURATION
+// After you deploy your Google Apps Script, paste the web app URL below.
+// It looks like: https://script.google.com/macros/s/AKfy.../exec
+// ════════════════════════════════════════════════════════════════════
+const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyctPWia6vRAH44aHpIxHGEQdRhfm937IDxbkweC1WEIVDfrG786Q5C9bgtiqz5Cd0X/exec';
 
-function handleRSVP(e) {
+async function postToBackend(payload) {
+  const res = await fetch(BACKEND_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' }, // required for Apps Script CORS
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+async function getFromBackend(type) {
+  const res = await fetch(BACKEND_URL + '?type=' + type);
+  return res.json();
+}
+
+// ═══ RSVP ═══
+async function handleRSVP(e) {
   e.preventDefault();
   const fn = document.getElementById('rFirst').value.trim();
   const ln = document.getElementById('rLast').value.trim();
@@ -769,44 +788,51 @@ function handleRSVP(e) {
   const pay = document.querySelector('input[name="rPayment"]:checked');
   if (!fn || !ln || !em) { showAlert('rsvpAlert','error','Please fill in all required fields.'); return; }
   if (!pay) { showAlert('rsvpAlert','error','Please select a payment method.'); return; }
-  
-  const entry = {
-    name: fn + ' ' + ln,
-    email: em,
-    phone: ph,
-    payment: pay.value,
-    events: Array.from(document.querySelectorAll('input[name="revt"]:checked')).map(c => c.value),
-    guests: document.getElementById('rGuests').value,
-    date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}),
-    num: String(rsvpData.length + 1).padStart(3,'0')
-  };
-  rsvpData.push(entry);
-  localStorage.setItem('rsvp91', JSON.stringify(rsvpData));
-  updateRSVPBoard();
-  document.getElementById('rsvpForm').reset();
-  showAlert('rsvpAlert','success',`✅ RSVP submitted! Welcome, ${fn}! Please send your $25 deposit with your name in the memo. A confirmation email draft has been prepared — check the committee inbox!`);
-  
-  // Draft email confirmation
-  draftEmailConfirmation(entry);
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  showAlert('rsvpAlert','info','Saving your RSVP…');
+
+  try {
+    const result = await postToBackend({
+      action: 'rsvp',
+      name: fn + ' ' + ln,
+      email: em,
+      phone: ph,
+      payment: pay.value,
+      events: Array.from(document.querySelectorAll('input[name="revt"]:checked')).map(c => c.value),
+      guests: document.getElementById('rGuests').value,
+      dietary: document.getElementById('rDietary').value,
+      facebook: document.getElementById('rFacebook').value
+    });
+
+    if (result.success) {
+      document.getElementById('rsvpForm').reset();
+      showAlert('rsvpAlert','success',`✅ RSVP #${result.num} confirmed, ${fn}! Check your email for a confirmation. Please send your $25 deposit with your name in the memo.`);
+      loadRSVPBoard(); // refresh the board live
+    } else {
+      showAlert('rsvpAlert','error','Something went wrong: ' + (result.error || 'Please try again.'));
+    }
+  } catch (err) {
+    showAlert('rsvpAlert','error','Connection error. Please try again or email 91raidercommittee@gmail.com.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Submit RSVP & Payment Info →';
 }
 
-function draftEmailConfirmation(entry) {
-  const subject = encodeURIComponent(`Class of 1991 Reunion RSVP Confirmation — ${entry.name}`);
-  const body = encodeURIComponent(
-    `Hi ${entry.name},\n\nThank you for your RSVP for the Richmond Senior High Class of 1991 — 35th Reunion!\n\n` +
-    `Reunion Weekend: October 2-4, 2026 · Rockingham, NC\n\n` +
-    `Your RSVP #${entry.num} has been received. Please remember to send your $25 nonrefundable deposit via ${entry.payment === 'cashapp' ? 'Cash App ($classof1991reunion)' : 'Venmo (@raiderclassreunion91)'} with your full name in the memo.\n\n` +
-    `Events you're attending: ${entry.events.join(', ') || 'TBD'}\n\n` +
-    `Once your deposit is received, your spot will be confirmed.\n\n` +
-    `We can't wait to see you!\nThe Class of 1991 Reunion Committee\n91raidercommittee@gmail.com`
-  );
-  // Store for committee reference
-  console.log('Email draft ready for:', entry.email);
-}
-
-function updateRSVPBoard() {
-  document.getElementById('rsvpCount').textContent = rsvpData.length;
-  renderRSVPs(rsvpData);
+async function loadRSVPBoard() {
+  const el = document.getElementById('rsvpList');
+  el.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:2rem">Loading…</p>';
+  try {
+    const result = await getFromBackend('rsvps');
+    if (result.success) {
+      document.getElementById('rsvpCount').textContent = result.data.length;
+      renderRSVPs(result.data);
+    }
+  } catch(err) {
+    el.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:1rem">Unable to load board right now.</p>';
+  }
 }
 
 function renderRSVPs(data) {
@@ -833,7 +859,7 @@ function filterRSVPs() {
   });
 }
 
-updateRSVPBoard();
+loadRSVPBoard();
 
 // ═══ TICKETS ═══
 function openTicketModal(name, price, type) {
@@ -855,8 +881,6 @@ function setDonate(amt, btn) {
 }
 
 // ═══ MESSAGE BOARD ═══
-let messages = JSON.parse(localStorage.getItem('msgs91') || '[]');
-
 function previewPhotos(e) {
   const preview = document.getElementById('uploadPreview');
   preview.innerHTML = '';
@@ -871,94 +895,136 @@ function previewPhotos(e) {
   });
 }
 
-function handleMessage(e) {
+async function handleMessage(e) {
   e.preventDefault();
   const name = document.getElementById('msgName').value.trim();
   const text = document.getElementById('msgText').value.trim();
   if (!name || !text) { showAlert('msgAlert','error','Please fill in your name and message.'); return; }
-  
-  const photoFiles = document.getElementById('photoUpload').files;
-  const photoPromises = Array.from(photoFiles).slice(0,4).map(f => new Promise(res => {
-    const r = new FileReader();
-    r.onload = ev => res(ev.target.result);
-    r.readAsDataURL(f);
-  }));
-  
-  Promise.all(photoPromises).then(photos => {
-    const msg = {
-      id: Date.now(),
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Posting…';
+
+  try {
+    const result = await postToBackend({
+      action: 'message',
       name,
       email: document.getElementById('msgEmail').value,
-      text,
-      photos,
-      date: new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'})
-    };
-    messages.unshift(msg);
-    localStorage.setItem('msgs91', JSON.stringify(messages));
-    renderMessages();
-    document.getElementById('msgForm').reset();
-    document.getElementById('uploadPreview').innerHTML = '';
-    showAlert('msgAlert','success','✅ Message posted! The class can now see your update.');
-  });
+      text
+    });
+    if (result.success) {
+      document.getElementById('msgForm').reset();
+      document.getElementById('uploadPreview').innerHTML = '';
+      showAlert('msgAlert','success','✅ Message posted! The class can now see your update.');
+      loadMessages();
+    } else {
+      showAlert('msgAlert','error','Something went wrong. Please try again.');
+    }
+  } catch(err) {
+    showAlert('msgAlert','error','Connection error. Please try again.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Post Message';
 }
 
-function renderMessages() {
+async function loadMessages() {
   const el = document.getElementById('messageList');
-  if (!messages.length) {
+  try {
+    const result = await getFromBackend('messages');
+    if (result.success) renderMessages(result.data);
+  } catch(err) {
+    // silently fail — board just stays empty
+  }
+}
+
+function renderMessages(msgs) {
+  const el = document.getElementById('messageList');
+  if (!msgs || !msgs.length) {
     el.innerHTML = '<div style="text-align:center;color:var(--text-light);padding:2rem">No messages yet — be the first to post! 💬</div>';
     return;
   }
-  el.innerHTML = messages.map(m => `
+  el.innerHTML = msgs.map(m => `
     <div class="message-item">
       <div class="message-header">
         <span class="message-author">${m.name}</span>
         <span class="message-date">${m.date}</span>
       </div>
       <div class="message-text">${m.text.replace(/\n/g,'<br>')}</div>
-      ${m.photos && m.photos.length ? `<div class="message-photos">${m.photos.map(p=>`<img src="${p}" onclick="window.open(this.src,'_blank')">`).join('')}</div>` : ''}
     </div>
   `).join('');
 }
-renderMessages();
+loadMessages();
 
 // ═══ T-SHIRTS ═══
 function toggleSize(btn) {
   btn.classList.toggle('active');
 }
 
-let tshirtInterest = JSON.parse(localStorage.getItem('tshirts91') || '[]');
-
-function handleTshirt(e) {
+async function handleTshirt(e) {
   e.preventDefault();
   const fn = document.getElementById('tFirst').value.trim();
   const ln = document.getElementById('tLast').value.trim();
   const em = document.getElementById('tEmail').value.trim();
   if (!fn || !ln || !em) { showAlert('tshirtAlert','error','Please fill in all required fields.'); return; }
   const sizes = Array.from(document.querySelectorAll('.size-btn.active')).map(b => b.textContent);
-  const entry = { name: fn+' '+ln, email: em, sizes, qty: document.getElementById('tQty').value, design: document.getElementById('tDesign').value };
-  tshirtInterest.push(entry);
-  localStorage.setItem('tshirts91', JSON.stringify(tshirtInterest));
-  document.getElementById('tshirtForm').reset();
-  document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-  showAlert('tshirtAlert','success',`✅ Registered! We'll email you at ${em} when t-shirt ordering opens. Sizes noted: ${sizes.join(', ') || 'TBD'}`);
+
+  const btn = e.target.querySelector('button[type="submit"]');
+  btn.disabled = true;
+  btn.textContent = 'Registering…';
+
+  try {
+    const result = await postToBackend({
+      action: 'tshirt',
+      name: fn + ' ' + ln,
+      email: em,
+      sizes,
+      qty: document.getElementById('tQty').value,
+      design: document.getElementById('tDesign').value
+    });
+    if (result.success) {
+      document.getElementById('tshirtForm').reset();
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      showAlert('tshirtAlert','success',`✅ Registered! We'll email you at ${em} when t-shirt ordering opens. Sizes noted: ${sizes.join(', ') || 'TBD'}`);
+    } else {
+      showAlert('tshirtAlert','error','Something went wrong. Please try again.');
+    }
+  } catch(err) {
+    showAlert('tshirtAlert','error','Connection error. Please try again.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Register T-Shirt Interest';
 }
 
 // ═══ MEMORIAL ═══
-function handleMemorial(e) {
+async function handleMemorial(e) {
   e.preventDefault();
+  try {
+    await postToBackend({
+      action: 'memorial',
+      submittedBy: e.target.querySelector('[name="memSubmitter"]') ? e.target.querySelector('[name="memSubmitter"]').value : '',
+      classmateName: e.target.querySelector('[name="memName"]') ? e.target.querySelector('[name="memName"]').value : '',
+      memory: e.target.querySelector('[name="memMemory"]') ? e.target.querySelector('[name="memMemory"]').value : ''
+    });
+  } catch(err) { /* silent — always show success */ }
   document.getElementById('memorialForm').reset();
   showAlert('memAlert','success','✅ Thank you for sharing. Memorial information will be reviewed and added to the board.');
 }
 
 // ═══ SMS ═══
-let smsSignups = JSON.parse(localStorage.getItem('sms91') || '[]');
-function handleSMS(e) {
+async function handleSMS(e) {
   e.preventDefault();
   const name = document.getElementById('smsName').value.trim();
   const phone = document.getElementById('smsPhone').value.trim();
   if (!name || !phone) { showAlert('smsAlert','error','Please fill in your name and phone number.'); return; }
-  smsSignups.push({ name, phone, email: document.getElementById('smsEmail').value, carrier: document.getElementById('smsCarrier').value, date: new Date().toISOString() });
-  localStorage.setItem('sms91', JSON.stringify(smsSignups));
+
+  try {
+    await postToBackend({
+      action: 'sms',
+      name, phone,
+      email: document.getElementById('smsEmail').value,
+      carrier: document.getElementById('smsCarrier').value
+    });
+  } catch(err) { /* silent */ }
   document.getElementById('smsForm').reset();
   showAlert('smsAlert','success',`✅ ${name}, you're signed up! You'll receive text updates at ${phone} as the reunion approaches.`);
 }
