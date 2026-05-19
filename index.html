@@ -765,9 +765,11 @@ setInterval(updateCountdown, 1000);
 const BACKEND_URL = 'https://script.google.com/macros/s/AKfycbyctPWia6vRAH44aHpIxHGEQdRhfm937IDxbkweC1WEIVDfrG786Q5C9bgtiqz5Cd0X/exec';
 
 async function postToBackend(payload) {
+  // Google Apps Script requires form data (not JSON) for cross-origin POST
+  const form = new FormData();
+  form.append('data', JSON.stringify(payload));
   const res = await fetch(BACKEND_URL, {
     method: 'POST',
-    headers: { 'Content-Type': 'text/plain' }, // required for Apps Script CORS
     body: JSON.stringify(payload)
   });
   return res.json();
@@ -1039,5 +1041,3 @@ function showAlert(id, type, msg) {
 </script>
 </body>
 </html>
-
-Connect Google Sheets backend
